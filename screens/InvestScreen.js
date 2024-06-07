@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 
 const InvestScreen = ({ route, navigation }) => {
-  const { addiction } = route.params;
+  const { addiction } = route.params || { addiction: 'cette addiction' }; // Ajoutez une valeur par défaut
   const [isMoney, setIsMoney] = useState(true);
 
   return (
@@ -46,7 +46,10 @@ const InvestScreen = ({ route, navigation }) => {
             <Text style={tw`text-red-600`}>Changer la devise</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={tw`bg-red-600 p-4 rounded-lg`} onPress={() => navigation.navigate('NextScreenName')}>
+        <TouchableOpacity
+          style={tw`bg-red-600 p-4 rounded-lg`}
+          onPress={() => navigation.navigate('LastConsumed')}
+        >
           <Text style={tw`text-white text-lg`}>Suivant</Text>
         </TouchableOpacity>
       </View>

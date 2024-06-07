@@ -1,24 +1,74 @@
-import { KeyboardAvoidingView, StyleSheet, Text, View, Platform } from 'react-native';
-import { Provider } from "react-redux";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import React, { useContext } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './screens/HomeScreen'; // Assurez-vous d'avoir ce fichier
-import InvestScreen from './screens/InvestScreen'; // Assurez-vous d'avoir ce fichier
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons, FontAwesome, MaterialIcons } from 'react-native-vector-icons';
+import { AppProvider, AppContext } from './AppContext';
+import HomeScreen from './screens/HomeScreen';
+import InvestScreen from './screens/InvestScreen';
+import LastConsumedScreen from './screens/LastConsumedScreen';
+import SummaryScreen from './screens/SummaryScreen';
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+function AppNavigator() {
+  const { isUserInfoFilled } = useContext(AppContext);
+
+  return (
+    <Tab.Navigator
+      initialRouteName={isUserInfoFilled ? 'Summary' : 'Home'}
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+            return <Ionicons name={iconName} size={size} color={color} />;
+          } else if (route.name === 'Summary') {
+            iconName = focused ? 'bar-chart' : 'bar-chart';
+            return <FontAwesome name={iconName} size={size} color={color} />;
+          } else if (route.name === 'Progress') {
+            iconName = focused ? 'line-chart' : 'line-chart';
+            return <FontAwesome name={iconName} size={size} color={color} />;
+          } else if (route.name === 'Journal') {
+            iconName = focused ? 'book' : 'book';
+            return <FontAwesome name={iconName} size={size} color={color} />;
+          } else if (route.name === 'Support') {
+            iconName = focused ? 'group' : 'group';
+            return <MaterialIcons name={iconName} size={size} color={color} />;
+          } else if (route.name === 'Tips') {
+            iconName = focused ? 'lightbulb-outline' : 'lightbulb-outline';
+            return <MaterialIcons name={iconName} size={size} color={color} />;
+          }
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: 'tomato',
+        inactiveTintColor: 'gray',
+      }}
+    >
+      {!isUserInfoFilled && <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />}
+      {!isUserInfoFilled && <Tab.Screen name="Invest" component={InvestScreen} options={{ headerShown: false }} />}
+      {!isUserInfoFilled && <Tab.Screen name="LastConsumed" component={LastConsumedScreen} options={{ headerShown: false }} />}
+      <Tab.Screen name="Summary" component={SummaryScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Progress" component={SummaryScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Journal" component={SummaryScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Support" component={SummaryScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Tips" component={SummaryScreen} options={{ headerShown: false }} />
+    </Tab.Navigator>
+  );
+}
 
 function App() {
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="Invest" component={InvestScreen} options={{ headerShown: false }} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <AppProvider>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </AppProvider>
   );
 }
 
