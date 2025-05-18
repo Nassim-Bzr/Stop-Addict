@@ -48,9 +48,7 @@ function AppNavigator() {
         inactiveTintColor: 'gray',
       }}
     >
-      {!isUserInfoFilled && <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />}
-      {!isUserInfoFilled && <Tab.Screen name="Invest" component={InvestScreen} options={{ headerShown: false }} />}
-      {!isUserInfoFilled && <Tab.Screen name="LastConsumed" component={LastConsumedScreen} options={{ headerShown: false }} />}
+  
       <Tab.Screen name="Summary" component={SummaryScreen} options={{ headerShown: false }} />
       <Tab.Screen name="Progress" component={SummaryScreen} options={{ headerShown: false }} />
       <Tab.Screen name="Journal" component={SummaryScreen} options={{ headerShown: false }} />
